@@ -34,6 +34,7 @@
     "test": "jest"
   },
   "peerDependencies": {
+    "@graphql-typed-document-node/core": "^3.1.0",
     "graphql": "^15.5.3"
   }
 }
