@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "https://github.com/izumin5210/graphql-fragment-mask.git",
   "author": "izumin5210 <m@izum.in>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.4.2"
+  }
 }
