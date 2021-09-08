@@ -9,7 +9,15 @@
   "module": "module/index.js",
   "types": "lib/index.d.ts",
   "devDependencies": {
+    "@graphql-codegen/add": "^3.1.0",
+    "@graphql-codegen/cli": "^2.2.0",
+    "@graphql-codegen/near-operation-file-preset": "^2.1.3",
+    "@graphql-codegen/typed-document-node": "^2.1.3",
+    "@graphql-codegen/typescript": "^2.2.1",
+    "@graphql-codegen/typescript-operations": "^2.1.3",
+    "@graphql-typed-document-node/core": "^3.1.0",
     "frolint": "^2.7.1",
+    "graphql": "^15.5.3",
     "jest": "^27.1.1",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.2"
@@ -18,5 +26,8 @@
     "build": "yarn build:commonjs && yarn build:esmodule",
     "build:commonjs": "tsc -p .",
     "build:esmodule": "tsc -p tsconfig.module.json"
+  },
+  "peerDependencies": {
+    "graphql": "^15.5.3"
   }
 }
