@@ -29,7 +29,7 @@
     "build:commonjs": "tsc -p .",
     "build:esmodule": "tsc -p tsconfig.module.json",
     "clean": "rimraf lib module src/**/__generated__",
-    "generate": "graphql-codegen",
+    "generate": "graphql-codegen --config ./src/__fixtures__/codegen.yml",
     "pretest": "yarn clean && yarn generate",
     "test": "jest"
   },

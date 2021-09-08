@@ -1,6 +1,6 @@
 import { maskWithFragment } from "./maskWithFragment";
-import * as simpleFixtures from "./__fixtures__/__generated__/simple.generated";
-import * as nestedFixtures from "./__fixtures__/__generated__/nested.generated";
+import * as simpleFixtures from "./__fixtures__/graphql/__generated__/simple.generated";
+import * as nestedFixtures from "./__fixtures__/graphql/__generated__/nested.generated";
 
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {

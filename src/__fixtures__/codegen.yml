@@ -1,6 +1,6 @@
-schema: schema.graphql
+schema: ./src/__fixtures__/schema.graphql
 documents:
-  - './src/__fixtures__/*.graphql'
+  - './src/__fixtures__/graphql/*.graphql'
 generates:
   src/__fixtures__/__generated__/graphqlTypes.ts:
     plugins:
