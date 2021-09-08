@@ -16,6 +16,7 @@ export type Comment = {
   __typename?: "Comment";
   author: User;
   body: Scalars["String"];
+  id: Scalars["String"];
 };
 
 export type Post = {

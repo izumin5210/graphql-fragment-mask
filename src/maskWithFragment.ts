@@ -33,8 +33,13 @@ function extractFields(
         const key = sel.name.value;
         if (!(key in input)) throw new Error(`field \`${key}\` does not found`);
         const value = input[sel.name.value];
-        if (sel.selectionSet) {
-          result[key] = extractFields(sel.selectionSet, value as any, fragmentDefMap);
+        const selectionSet = sel.selectionSet;
+        if (selectionSet) {
+          if (Array.isArray(value)) {
+            result[key] = value.map((v) => extractFields(selectionSet, v, fragmentDefMap));
+          } else {
+            result[key] = extractFields(selectionSet, value as any, fragmentDefMap);
+          }
         } else {
           result[key] = value;
         }

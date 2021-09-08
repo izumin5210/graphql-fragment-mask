@@ -1,0 +1,17 @@
+fragment PostWithComments on Post {
+  title
+  body
+  comments {
+    body
+  }
+}
+
+query GetPostWithComments($postId: String!) {
+  postById(postId: $postId) {
+    id
+    comments {
+      id
+    }
+    ...PostWithComments
+  }
+}

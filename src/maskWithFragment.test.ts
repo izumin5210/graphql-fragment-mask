@@ -1,6 +1,7 @@
 import { maskWithFragment } from "./maskWithFragment";
 import * as simpleFixtures from "./__fixtures__/graphql/__generated__/simple.generated";
 import * as nestedFixtures from "./__fixtures__/graphql/__generated__/nested.generated";
+import * as nestedListFixtures from "./__fixtures__/graphql/__generated__/nestedList.generated";
 
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
@@ -41,6 +42,41 @@ Object {
     "avatarUrl": null,
     "username": "testuser",
   },
+  "title": "Hi",
+}
+`);
+});
+
+it("masks query results with nested fragment with list fields", () => {
+  const input: nestedListFixtures.GetPostWithCommentsQuery = {
+    __typename: "Query",
+    postById: {
+      __typename: "Post",
+      id: "1",
+      title: "Hi",
+      body: "Foo",
+      comments: [
+        { __typename: "Comment", id: "1", body: "Hello" },
+        { __typename: "Comment", id: "2", body: "Hi" },
+      ],
+    },
+  };
+  const output: nestedListFixtures.PostWithCommentsFragment = maskWithFragment(
+    nestedListFixtures.PostWithCommentsFragmentDoc,
+    input.postById
+  );
+
+  expect(output).toMatchInlineSnapshot(`
+Object {
+  "body": "Foo",
+  "comments": Array [
+    Object {
+      "body": "Hello",
+    },
+    Object {
+      "body": "Hi",
+    },
+  ],
   "title": "Hi",
 }
 `);
