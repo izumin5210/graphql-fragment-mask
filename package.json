@@ -2,11 +2,18 @@
   "name": "graphql-fragment-mask",
   "version": "0.0.1",
   "description": "Mask GraphQL query result with Fragment",
-  "main": "index.js",
   "repository": "https://github.com/izumin5210/graphql-fragment-mask.git",
   "author": "izumin5210 <m@izum.in>",
   "license": "MIT",
+  "main": "lib/index.js",
+  "module": "module/index.js",
+  "types": "lib/index.d.ts",
   "devDependencies": {
     "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "build": "yarn build:commonjs && yarn build:esmodule",
+    "build:commonjs": "tsc -p .",
+    "build:esmodule": "tsc -p tsconfig.module.json"
   }
 }
