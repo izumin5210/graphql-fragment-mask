@@ -20,14 +20,18 @@
     "frolint": "^2.7.1",
     "graphql": "^15.5.3",
     "jest": "^27.1.1",
+    "rimraf": "^3.0.2",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.2"
   },
   "scripts": {
-    "build": "yarn build:commonjs && yarn build:esmodule",
+    "build": "yarn clean && yarn build:commonjs && yarn build:esmodule",
     "build:commonjs": "tsc -p .",
     "build:esmodule": "tsc -p tsconfig.module.json",
-    "generate": "yarn graphql-codegen"
+    "clean": "rimraf lib module src/**/__generated__",
+    "generate": "graphql-codegen",
+    "pretest": "yarn clean && yarn generate",
+    "test": "jest"
   },
   "peerDependencies": {
     "graphql": "^15.5.3"
