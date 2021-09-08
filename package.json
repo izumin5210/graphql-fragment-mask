@@ -26,7 +26,8 @@
   "scripts": {
     "build": "yarn build:commonjs && yarn build:esmodule",
     "build:commonjs": "tsc -p .",
-    "build:esmodule": "tsc -p tsconfig.module.json"
+    "build:esmodule": "tsc -p tsconfig.module.json",
+    "generate": "yarn graphql-codegen"
   },
   "peerDependencies": {
     "graphql": "^15.5.3"

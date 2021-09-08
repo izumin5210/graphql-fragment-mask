@@ -1,0 +1,11 @@
+fragment UserHeader on User {
+  username
+  avatarUrl
+}
+
+query GetUserHeader($userId: String!) {
+  userById(userId: $userId) {
+    id
+    ...UserHeader
+  }
+}
