@@ -1,5 +1,6 @@
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { FragmentDefinitionNode, InlineFragmentNode } from "graphql";
+import deepMerge from "deepmerge";
 
 type AnyObject = Record<string, unknown>;
 type Superset<T extends AnyObject> = T & AnyObject;
@@ -28,7 +29,7 @@ function extractFields(
   input: Record<string, unknown>,
   fragmentDefMap: Record<string, FragmentDefinitionNode>
 ): Record<string, unknown> {
-  const result: Record<string, unknown> = {};
+  let result: Record<string, unknown> = {};
 
   for (const sel of selectionSet.selections) {
     switch (sel.kind) {
@@ -41,7 +42,10 @@ function extractFields(
           if (Array.isArray(value)) {
             result[key] = value.map((v) => extractFields(selectionSet, v, fragmentDefMap));
           } else {
-            result[key] = extractFields(selectionSet, value as any, fragmentDefMap);
+            result[key] = deepMerge(
+              (result[key] as any) ?? {},
+              extractFields(selectionSet, value as any, fragmentDefMap)
+            );
           }
         } else {
           result[key] = value;
@@ -51,11 +55,11 @@ function extractFields(
       case "FragmentSpread": {
         const fragment = fragmentDefMap[sel.name.value];
         if (fragment == null) throw new Error(`fragment \`${sel.name.value}\` does not found`);
-        Object.assign(result, extractFields(fragment.selectionSet, input, fragmentDefMap));
+        result = deepMerge(result, extractFields(fragment.selectionSet, input, fragmentDefMap));
         break;
       }
       case "InlineFragment": {
-        Object.assign(result, extractFields(sel.selectionSet, input, fragmentDefMap));
+        result = deepMerge(result, extractFields(sel.selectionSet, input, fragmentDefMap));
         break;
       }
       default: {

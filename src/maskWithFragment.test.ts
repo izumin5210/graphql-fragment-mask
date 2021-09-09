@@ -4,6 +4,7 @@ import * as nestedFixtures from "./__fixtures__/graphql/__generated__/nested.gen
 import * as nestedListFixtures from "./__fixtures__/graphql/__generated__/nestedList.generated";
 import * as inlineFragmentFixtures from "./__fixtures__/graphql/__generated__/inlineFragment.generated";
 import * as aliasFixtures from "./__fixtures__/graphql/__generated__/alias.generated";
+import * as multipleFragmentsFixtures from "./__fixtures__/graphql/__generated__/multipleFragments.generated";
 
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
@@ -118,6 +119,41 @@ Object {
     "thumbnailUrl": "http://example.com/users/123/thumbnail.png",
     "username": "testuser",
   },
+}
+`);
+});
+
+it("masks query results with multiple fragments", () => {
+  const input: multipleFragmentsFixtures.GetPostDetailQuery = {
+    __typename: "Query",
+    postById: {
+      __typename: "Post",
+      id: "1",
+      title: "Hi",
+      body: "foo",
+      author: { __typename: "User", username: "testuser", avatarUrl: null },
+    },
+  };
+
+  const detail = maskWithFragment(multipleFragmentsFixtures.PostDetailFragmentDoc, input.postById);
+  expect(detail).toMatchInlineSnapshot(`
+Object {
+  "author": Object {
+    "avatarUrl": null,
+    "username": "testuser",
+  },
+  "body": "foo",
+  "title": "Hi",
+}
+`);
+
+  const detailHeader = maskWithFragment(multipleFragmentsFixtures.PostDetailHeaderFragmentDoc, input.postById);
+  expect(detailHeader).toMatchInlineSnapshot(`
+Object {
+  "author": Object {
+    "avatarUrl": null,
+  },
+  "title": "Hi",
 }
 `);
 });

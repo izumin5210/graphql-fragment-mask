@@ -1,0 +1,27 @@
+fragment PostUserAvatar on Post {
+  author {
+    avatarUrl
+  }
+}
+
+fragment PostDetailHeader on Post {
+  title
+  ...PostUserAvatar
+}
+
+fragment PostDetail on Post {
+  title
+  body
+  author {
+    username
+  }
+  ...PostUserAvatar
+}
+
+query GetPostDetail($postId: String!) {
+  postById(postId: $postId) {
+    id
+    ...PostDetail
+    ...PostDetailHeader
+  }
+}
