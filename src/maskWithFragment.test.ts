@@ -17,6 +17,7 @@ it("masks query results with simple fragment", () => {
 
   expect(output).toMatchInlineSnapshot(`
 Object {
+  "__typename": "User",
   "avatarUrl": null,
   "username": "testuser",
 }
@@ -37,7 +38,9 @@ it("masks query results with nested fragment", () => {
 
   expect(output).toMatchInlineSnapshot(`
 Object {
+  "__typename": "Post",
   "author": Object {
+    "__typename": "User",
     "avatarUrl": null,
     "username": "testuser",
   },
@@ -64,12 +67,15 @@ it("masks query results with nested fragment with list fields", () => {
 
   expect(output).toMatchInlineSnapshot(`
 Object {
+  "__typename": "Post",
   "body": "Foo",
   "comments": Array [
     Object {
+      "__typename": "Comment",
       "body": "Hello",
     },
     Object {
+      "__typename": "Comment",
       "body": "Hi",
     },
   ],
@@ -92,7 +98,9 @@ it("masks query results with inline fragment", () => {
 
   expect(output).toMatchInlineSnapshot(`
 Object {
+  "__typename": "Post",
   "author": Object {
+    "__typename": "User",
     "username": "testuser",
   },
   "title": "Hi",
@@ -115,9 +123,11 @@ it("masks query results with fragment with alias", () => {
 
   expect(output).toMatchInlineSnapshot(`
 Object {
+  "__typename": "Post",
   "body": "Hello",
   "title": "Hi",
   "user": Object {
+    "__typename": "User",
     "thumbnailUrl": "http://example.com/users/123/thumbnail.png",
     "username": "testuser",
   },
@@ -140,7 +150,9 @@ it("masks query results with multiple fragments", () => {
   const detail = maskWithFragment(multipleFragmentsFixtures.PostDetailFragmentDoc, input.postById);
   expect(detail).toMatchInlineSnapshot(`
 Object {
+  "__typename": "Post",
   "author": Object {
+    "__typename": "User",
     "avatarUrl": null,
     "username": "testuser",
   },
@@ -152,7 +164,9 @@ Object {
   const detailHeader = maskWithFragment(multipleFragmentsFixtures.PostDetailHeaderFragmentDoc, input.postById);
   expect(detailHeader).toMatchInlineSnapshot(`
 Object {
+  "__typename": "Post",
   "author": Object {
+    "__typename": "User",
     "avatarUrl": null,
   },
   "title": "Hi",
@@ -183,7 +197,9 @@ it("masks list query results with fragment", () => {
   expect(output).toMatchInlineSnapshot(`
 Array [
   Object {
+    "__typename": "Post",
     "author": Object {
+      "__typename": "User",
       "avatarUrl": null,
       "id": "123",
       "username": "testuser",
@@ -191,7 +207,9 @@ Array [
     "title": "Hi",
   },
   Object {
+    "__typename": "Post",
     "author": Object {
+      "__typename": "User",
       "avatarUrl": null,
       "id": "124",
       "username": "debuguser",
@@ -219,14 +237,18 @@ it("masks list query results with fragment", () => {
 
   expect(output).toMatchInlineSnapshot(`
 Object {
+  "__typename": "Post",
   "attachmentFiles": Array [
     Object {
+      "__typename": "Image",
       "imageUrl": "https://example.com/posts/1/images/1",
     },
     Object {
+      "__typename": "Video",
       "videoUrl": "https://example.com/posts/1/videos/2",
     },
     Object {
+      "__typename": "Image",
       "imageUrl": "https://example.com/posts/1/images/2",
     },
   ],

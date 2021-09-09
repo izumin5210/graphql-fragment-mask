@@ -78,6 +78,9 @@ function extractFieldsFromSelections(
         } else {
           result[key] = value;
         }
+        if ("__typename" in input) {
+          (result as any).__typename = (input as any).__typename;
+        }
         break;
       }
       case "FragmentSpread": {
