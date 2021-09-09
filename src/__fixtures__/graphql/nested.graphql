@@ -1,8 +1,12 @@
+fragment PostHeaderUser on User {
+  username
+  avatarUrl
+}
+
 fragment PostHeader on Post {
   title
   author {
-    username
-    avatarUrl
+    ...PostHeaderUser
   }
 }
 

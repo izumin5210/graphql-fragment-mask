@@ -2,6 +2,12 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+export type PostHeaderUserFragment = {
+  readonly __typename?: "User";
+  readonly username: string;
+  readonly avatarUrl?: Types.Maybe<string>;
+};
+
 export type PostHeaderFragment = {
   readonly __typename?: "Post";
   readonly title: string;
@@ -31,6 +37,23 @@ export type GetPostHeaderQuery = {
   };
 };
 
+export const PostHeaderUserFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "PostHeaderUser" },
+      typeCondition: { kind: "NamedType", name: { kind: "Name", value: "User" } },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "username" } },
+          { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PostHeaderUserFragment, unknown>;
 export const PostHeaderFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -47,15 +70,13 @@ export const PostHeaderFragmentDoc = {
             name: { kind: "Name", value: "author" },
             selectionSet: {
               kind: "SelectionSet",
-              selections: [
-                { kind: "Field", name: { kind: "Name", value: "username" } },
-                { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
-              ],
+              selections: [{ kind: "FragmentSpread", name: { kind: "Name", value: "PostHeaderUser" } }],
             },
           },
         ],
       },
     },
+    ...PostHeaderUserFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<PostHeaderFragment, unknown>;
 export const GetPostHeaderDocument = {
