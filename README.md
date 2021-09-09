@@ -1,6 +1,7 @@
 # graphql-fragment-mask
 [![CI](https://github.com/izumin5210/graphql-fragment-mask/actions/workflows/ci.yml/badge.svg)](https://github.com/izumin5210/graphql-fragment-mask/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/izumin5210/graphql-fragment-mask/badge.svg?branch=main)](https://coveralls.io/github/izumin5210/graphql-fragment-mask?branch=main)
+[![npm](https://img.shields.io/npm/v/graphql-fragment-mask)](https://www.npmjs.com/package/graphql-fragment-mask)
 [![LICENSE](https://img.shields.io/github/license/izumin5210/graphql-fragment-mask)](./LICENSE)
 
 Mask GraphQL query result with Fragment with [https://the-guild.dev/blog/typed-document-node](https://the-guild.dev/blog/typed-document-node) ([graphql-anywhere](https://www.npmjs.com/package/graphql-anywhere) alternative)
