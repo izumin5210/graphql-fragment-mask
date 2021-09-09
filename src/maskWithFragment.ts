@@ -8,7 +8,15 @@ type Superset<T extends AnyObject> = T & AnyObject;
 export function maskWithFragment<TData extends AnyObject>(
   doc: TypedDocumentNode<TData, any>,
   input: Superset<TData>
-): TData {
+): TData;
+export function maskWithFragment<TData extends AnyObject>(
+  doc: TypedDocumentNode<TData, any>,
+  input: ReadonlyArray<Superset<TData>>
+): ReadonlyArray<TData>;
+export function maskWithFragment<TData extends AnyObject>(
+  doc: TypedDocumentNode<TData, any>,
+  input: Superset<TData> | ReadonlyArray<Superset<TData>>
+): TData | ReadonlyArray<TData> {
   if (doc.definitions[0]?.kind !== "FragmentDefinition") {
     throw new Error("input document should be fragment definition");
   }
@@ -21,7 +29,10 @@ export function maskWithFragment<TData extends AnyObject>(
     }
   }
 
-  return extractFields(entryFragmentDef.selectionSet, input, fragmentDefMap) as TData;
+  if (Array.isArray(input)) {
+    return input.map((v) => extractFields(entryFragmentDef.selectionSet, v, fragmentDefMap) as TData);
+  }
+  return extractFields(entryFragmentDef.selectionSet, input as Superset<TData>, fragmentDefMap) as TData;
 }
 
 function extractFields(

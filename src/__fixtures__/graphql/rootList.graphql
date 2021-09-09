@@ -1,0 +1,15 @@
+fragment PostListItem on Post {
+  title
+  author {
+    id
+    avatarUrl
+    username
+  }
+}
+
+query ListPosts($userId: String!) {
+  postsByUserId(userId: $userId) {
+    id
+    ...PostListItem
+  }
+}
