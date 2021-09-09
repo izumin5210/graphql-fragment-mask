@@ -1,10 +1,13 @@
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { FragmentDefinitionNode, InlineFragmentNode } from "graphql";
 
-export function maskWithFragment<TFilteredData extends Record<string, unknown>, TData extends TFilteredData>(
+type AnyObject = Record<string, unknown>;
+type Superset<T extends AnyObject> = T & AnyObject;
+
+export function maskWithFragment<TData extends AnyObject>(
   doc: TypedDocumentNode<TData, any>,
-  input: TData
-): TFilteredData {
+  input: Superset<TData>
+): TData {
   if (doc.definitions[0]?.kind !== "FragmentDefinition") {
     throw new Error("input document should be fragment definition");
   }
@@ -17,7 +20,7 @@ export function maskWithFragment<TFilteredData extends Record<string, unknown>, 
     }
   }
 
-  return extractFields(entryFragmentDef.selectionSet, input, fragmentDefMap) as TFilteredData;
+  return extractFields(entryFragmentDef.selectionSet, input, fragmentDefMap) as TData;
 }
 
 function extractFields(

@@ -8,10 +8,7 @@ it("masks query results with simple fragment", () => {
     __typename: "Query",
     userById: { __typename: "User", id: "123", username: "testuser", avatarUrl: null },
   };
-  const output: simpleFixtures.UserHeaderFragment = maskWithFragment(
-    simpleFixtures.UserHeaderFragmentDoc,
-    input.userById
-  );
+  const output = maskWithFragment(simpleFixtures.UserHeaderFragmentDoc, input.userById);
 
   expect(output).toMatchInlineSnapshot(`
 Object {
@@ -31,10 +28,7 @@ it("masks query results with nested fragment", () => {
       author: { __typename: "User", id: "123", username: "testuser", avatarUrl: null },
     },
   };
-  const output: nestedFixtures.PostHeaderFragment = maskWithFragment(
-    nestedFixtures.PostHeaderFragmentDoc,
-    input.postById
-  );
+  const output = maskWithFragment(nestedFixtures.PostHeaderFragmentDoc, input.postById);
 
   expect(output).toMatchInlineSnapshot(`
 Object {
@@ -61,10 +55,7 @@ it("masks query results with nested fragment with list fields", () => {
       ],
     },
   };
-  const output: nestedListFixtures.PostWithCommentsFragment = maskWithFragment(
-    nestedListFixtures.PostWithCommentsFragmentDoc,
-    input.postById
-  );
+  const output = maskWithFragment(nestedListFixtures.PostWithCommentsFragmentDoc, input.postById);
 
   expect(output).toMatchInlineSnapshot(`
 Object {
