@@ -1,0 +1,21 @@
+fragment PostImage on Image {
+  imageUrl
+}
+
+fragment PostVideo on Video {
+  videoUrl
+}
+
+fragment PostWithAttachments on Post {
+  title
+  attachmentFiles {
+    ...PostImage
+    ...PostVideo
+  }
+}
+
+query GetPostWithAttachments($postId: String!) {
+  postById(postId: $postId) {
+    ...PostWithAttachments
+  }
+}

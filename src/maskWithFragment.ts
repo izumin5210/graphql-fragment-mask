@@ -30,12 +30,29 @@ export function maskWithFragment<TData extends AnyObject>(
   }
 
   if (Array.isArray(input)) {
-    return input.map((v) => extractFields(entryFragmentDef.selectionSet, v, fragmentDefMap) as TData);
+    return input.map((v) => extractFields(entryFragmentDef, v, fragmentDefMap) as TData);
   }
-  return extractFields(entryFragmentDef.selectionSet, input as Superset<TData>, fragmentDefMap) as TData;
+  return extractFields(entryFragmentDef, input as Superset<TData>, fragmentDefMap) as TData;
 }
 
 function extractFields(
+  fragmentDef: FragmentDefinitionNode | InlineFragmentNode,
+  input: Record<string, unknown>,
+  fragmentDefMap: Record<string, FragmentDefinitionNode>
+): Record<string, unknown> {
+  if (fragmentDef.typeCondition) {
+    const wantType = fragmentDef.typeCondition.name.value;
+    if (!("__typename" in input)) {
+      throw new Error(`\`__typename\` is required in inline fragment ${wantType}`);
+    }
+    if (wantType !== (input as any).__typename) {
+      return {};
+    }
+  }
+  return extractFieldsFromSelections(fragmentDef.selectionSet, input, fragmentDefMap);
+}
+
+function extractFieldsFromSelections(
   selectionSet: FragmentDefinitionNode["selectionSet"] | InlineFragmentNode["selectionSet"],
   input: Record<string, unknown>,
   fragmentDefMap: Record<string, FragmentDefinitionNode>
@@ -51,11 +68,11 @@ function extractFields(
         const selectionSet = sel.selectionSet;
         if (selectionSet) {
           if (Array.isArray(value)) {
-            result[key] = value.map((v) => extractFields(selectionSet, v, fragmentDefMap));
+            result[key] = value.map((v) => extractFieldsFromSelections(selectionSet, v, fragmentDefMap));
           } else {
             result[key] = deepMerge(
               (result[key] as any) ?? {},
-              extractFields(selectionSet, value as any, fragmentDefMap)
+              extractFieldsFromSelections(selectionSet, value as any, fragmentDefMap)
             );
           }
         } else {
@@ -66,11 +83,11 @@ function extractFields(
       case "FragmentSpread": {
         const fragment = fragmentDefMap[sel.name.value];
         if (fragment == null) throw new Error(`fragment \`${sel.name.value}\` does not found`);
-        result = deepMerge(result, extractFields(fragment.selectionSet, input, fragmentDefMap));
+        result = deepMerge(result, extractFields(fragment, input, fragmentDefMap));
         break;
       }
       case "InlineFragment": {
-        result = deepMerge(result, extractFields(sel.selectionSet, input, fragmentDefMap));
+        result = deepMerge(result, extractFields(sel, input, fragmentDefMap));
         break;
       }
       default: {

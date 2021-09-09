@@ -11,6 +11,7 @@ type Post {
   body: String!
   author: User!
   comments: [Comment!]!
+  attachmentFiles: [AttachmentFile!]!
 }
 
 type Comment {
@@ -18,6 +19,18 @@ type Comment {
   author: User!
   body: String!
 }
+
+type Image {
+  id: String!
+  imageUrl: String!
+}
+
+type Video {
+  id: String!
+  videoUrl: String!
+}
+
+union AttachmentFile = Image | Video
 
 type Query {
   userById(userId: String!): User!

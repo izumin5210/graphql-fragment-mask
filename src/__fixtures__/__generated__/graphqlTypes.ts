@@ -12,6 +12,8 @@ export type Scalars = {
   Float: number;
 };
 
+export type AttachmentFile = Image | Video;
+
 export type Comment = {
   readonly __typename?: "Comment";
   readonly author: User;
@@ -19,8 +21,15 @@ export type Comment = {
   readonly id: Scalars["String"];
 };
 
+export type Image = {
+  readonly __typename?: "Image";
+  readonly id: Scalars["String"];
+  readonly imageUrl: Scalars["String"];
+};
+
 export type Post = {
   readonly __typename?: "Post";
+  readonly attachmentFiles: ReadonlyArray<AttachmentFile>;
   readonly author: User;
   readonly body: Scalars["String"];
   readonly comments: ReadonlyArray<Comment>;
@@ -53,4 +62,10 @@ export type User = {
   readonly email: Scalars["String"];
   readonly id: Scalars["String"];
   readonly username: Scalars["String"];
+};
+
+export type Video = {
+  readonly __typename?: "Video";
+  readonly id: Scalars["String"];
+  readonly videoUrl: Scalars["String"];
 };

@@ -6,6 +6,7 @@ import * as inlineFragmentFixtures from "./__fixtures__/graphql/__generated__/in
 import * as aliasFixtures from "./__fixtures__/graphql/__generated__/alias.generated";
 import * as multipleFragmentsFixtures from "./__fixtures__/graphql/__generated__/multipleFragments.generated";
 import * as rootListFixtures from "./__fixtures__/graphql/__generated__/rootList.generated";
+import * as unionFixtures from "./__fixtures__/graphql/__generated__/union.generated";
 
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
@@ -198,5 +199,38 @@ Array [
     "title": "Hello",
   },
 ]
+`);
+});
+
+it("masks list query results with fragment", () => {
+  const input: unionFixtures.GetPostWithAttachmentsQuery = {
+    __typename: "Query",
+    postById: {
+      __typename: "Post",
+      title: "Hi",
+      attachmentFiles: [
+        { __typename: "Image", imageUrl: "https://example.com/posts/1/images/1" },
+        { __typename: "Video", videoUrl: "https://example.com/posts/1/videos/2" },
+        { __typename: "Image", imageUrl: "https://example.com/posts/1/images/2" },
+      ],
+    },
+  };
+  const output = maskWithFragment(unionFixtures.PostWithAttachmentsFragmentDoc, input.postById);
+
+  expect(output).toMatchInlineSnapshot(`
+Object {
+  "attachmentFiles": Array [
+    Object {
+      "imageUrl": "https://example.com/posts/1/images/1",
+    },
+    Object {
+      "videoUrl": "https://example.com/posts/1/videos/2",
+    },
+    Object {
+      "imageUrl": "https://example.com/posts/1/images/2",
+    },
+  ],
+  "title": "Hi",
+}
 `);
 });
