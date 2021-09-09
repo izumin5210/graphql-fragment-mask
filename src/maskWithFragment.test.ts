@@ -3,6 +3,7 @@ import * as simpleFixtures from "./__fixtures__/graphql/__generated__/simple.gen
 import * as nestedFixtures from "./__fixtures__/graphql/__generated__/nested.generated";
 import * as nestedListFixtures from "./__fixtures__/graphql/__generated__/nestedList.generated";
 import * as inlineFragmentFixtures from "./__fixtures__/graphql/__generated__/inlineFragment.generated";
+import * as aliasFixtures from "./__fixtures__/graphql/__generated__/alias.generated";
 
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
@@ -92,6 +93,31 @@ Object {
     "username": "testuser",
   },
   "title": "Hi",
+}
+`);
+});
+
+it("masks query results with fragment with alias", () => {
+  const input: aliasFixtures.GetPostSummaryQuery = {
+    __typename: "Query",
+    postById: {
+      __typename: "Post",
+      id: "1",
+      title: "Hi",
+      body: "Hello",
+      user: { __typename: "User", username: "testuser", thumbnailUrl: "http://example.com/users/123/thumbnail.png" },
+    },
+  };
+  const output = maskWithFragment(aliasFixtures.PostSummaryFragmentDoc, input.postById);
+
+  expect(output).toMatchInlineSnapshot(`
+Object {
+  "body": "Hello",
+  "title": "Hi",
+  "user": Object {
+    "thumbnailUrl": "http://example.com/users/123/thumbnail.png",
+    "username": "testuser",
+  },
 }
 `);
 });

@@ -33,9 +33,9 @@ function extractFields(
   for (const sel of selectionSet.selections) {
     switch (sel.kind) {
       case "Field": {
-        const key = sel.name.value;
+        const key = (sel.alias ?? sel.name).value;
         if (!(key in input)) throw new Error(`field \`${key}\` does not found`);
-        const value = input[sel.name.value];
+        const value = input[key];
         const selectionSet = sel.selectionSet;
         if (selectionSet) {
           if (Array.isArray(value)) {

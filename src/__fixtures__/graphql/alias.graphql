@@ -1,0 +1,15 @@
+fragment PostSummary on Post {
+  title
+  body
+  user: author {
+    username
+    thumbnailUrl: avatarUrl
+  }
+}
+
+query GetPostSummary($postId: String!) {
+  postById(postId: $postId) {
+    id
+    ...PostSummary
+  }
+}
