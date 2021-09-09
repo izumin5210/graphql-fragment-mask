@@ -3,11 +3,30 @@
   "version": "0.0.1",
   "description": "Mask GraphQL query result with Fragment",
   "repository": "https://github.com/izumin5210/graphql-fragment-mask.git",
+  "homepage": "https://github.com/izumin5210/graphql-fragment-mask",
+  "bugs": {
+    "url": "https://github.com/izumin5210/graphql-fragment-mask/issues"
+  },
   "author": "izumin5210 <m@izum.in>",
   "license": "MIT",
+  "keywords": [
+    "graphql",
+    "fragment",
+    "relay",
+    "grahpql-anywhere",
+    "apollo",
+    "graphql-codegen"
+  ],
   "main": "lib/index.js",
   "module": "module/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib/",
+    "module/",
+    "src/",
+    "!src/__fixtures__",
+    "!src/**/*.test.ts"
+  ],
   "devDependencies": {
     "@graphql-codegen/add": "^3.1.0",
     "@graphql-codegen/cli": "^2.2.0",
