@@ -13,26 +13,26 @@ export type Scalars = {
 };
 
 export type Comment = {
-  __typename?: "Comment";
-  author: User;
-  body: Scalars["String"];
-  id: Scalars["String"];
+  readonly __typename?: "Comment";
+  readonly author: User;
+  readonly body: Scalars["String"];
+  readonly id: Scalars["String"];
 };
 
 export type Post = {
-  __typename?: "Post";
-  author: User;
-  body: Scalars["String"];
-  comments: Array<Comment>;
-  id: Scalars["String"];
-  title: Scalars["String"];
+  readonly __typename?: "Post";
+  readonly author: User;
+  readonly body: Scalars["String"];
+  readonly comments: ReadonlyArray<Comment>;
+  readonly id: Scalars["String"];
+  readonly title: Scalars["String"];
 };
 
 export type Query = {
-  __typename?: "Query";
-  postById: Post;
-  postsByUserId: Array<Post>;
-  userById: User;
+  readonly __typename?: "Query";
+  readonly postById: Post;
+  readonly postsByUserId: ReadonlyArray<Post>;
+  readonly userById: User;
 };
 
 export type QueryPostByIdArgs = {
@@ -48,9 +48,9 @@ export type QueryUserByIdArgs = {
 };
 
 export type User = {
-  __typename?: "User";
-  avatarUrl?: Maybe<Scalars["String"]>;
-  email: Scalars["String"];
-  id: Scalars["String"];
-  username: Scalars["String"];
+  readonly __typename?: "User";
+  readonly avatarUrl?: Maybe<Scalars["String"]>;
+  readonly email: Scalars["String"];
+  readonly id: Scalars["String"];
+  readonly username: Scalars["String"];
 };

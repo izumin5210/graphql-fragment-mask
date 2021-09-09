@@ -2,41 +2,32 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
-export type PostHeaderFragment = {
+export type PostWithAuthorFragment = {
   readonly __typename?: "Post";
   readonly title: string;
-  readonly author: {
-    readonly __typename?: "User";
-    readonly username: string;
-    readonly avatarUrl?: Types.Maybe<string>;
-  };
+  readonly author: { readonly __typename?: "User"; readonly username: string };
 };
 
-export type GetPostHeaderQueryVariables = Types.Exact<{
+export type GetPostWithAuthorQueryVariables = Types.Exact<{
   postId: Types.Scalars["String"];
 }>;
 
-export type GetPostHeaderQuery = {
+export type GetPostWithAuthorQuery = {
   readonly __typename?: "Query";
   readonly postById: {
     readonly __typename?: "Post";
     readonly id: string;
     readonly title: string;
-    readonly author: {
-      readonly __typename?: "User";
-      readonly id: string;
-      readonly username: string;
-      readonly avatarUrl?: Types.Maybe<string>;
-    };
+    readonly author: { readonly __typename?: "User"; readonly username: string };
   };
 };
 
-export const PostHeaderFragmentDoc = {
+export const PostWithAuthorFragmentDoc = {
   kind: "Document",
   definitions: [
     {
       kind: "FragmentDefinition",
-      name: { kind: "Name", value: "PostHeader" },
+      name: { kind: "Name", value: "PostWithAuthor" },
       typeCondition: { kind: "NamedType", name: { kind: "Name", value: "Post" } },
       selectionSet: {
         kind: "SelectionSet",
@@ -48,8 +39,14 @@ export const PostHeaderFragmentDoc = {
             selectionSet: {
               kind: "SelectionSet",
               selections: [
-                { kind: "Field", name: { kind: "Name", value: "username" } },
-                { kind: "Field", name: { kind: "Name", value: "avatarUrl" } },
+                {
+                  kind: "InlineFragment",
+                  typeCondition: { kind: "NamedType", name: { kind: "Name", value: "User" } },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [{ kind: "Field", name: { kind: "Name", value: "username" } }],
+                  },
+                },
               ],
             },
           },
@@ -57,14 +54,14 @@ export const PostHeaderFragmentDoc = {
       },
     },
   ],
-} as unknown as DocumentNode<PostHeaderFragment, unknown>;
-export const GetPostHeaderDocument = {
+} as unknown as DocumentNode<PostWithAuthorFragment, unknown>;
+export const GetPostWithAuthorDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "GetPostHeader" },
+      name: { kind: "Name", value: "GetPostWithAuthor" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -89,21 +86,13 @@ export const GetPostHeaderDocument = {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "id" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "author" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [{ kind: "Field", name: { kind: "Name", value: "id" } }],
-                  },
-                },
-                { kind: "FragmentSpread", name: { kind: "Name", value: "PostHeader" } },
+                { kind: "FragmentSpread", name: { kind: "Name", value: "PostWithAuthor" } },
               ],
             },
           },
         ],
       },
     },
-    ...PostHeaderFragmentDoc.definitions,
+    ...PostWithAuthorFragmentDoc.definitions,
   ],
-} as unknown as DocumentNode<GetPostHeaderQuery, GetPostHeaderQueryVariables>;
+} as unknown as DocumentNode<GetPostWithAuthorQuery, GetPostWithAuthorQueryVariables>;

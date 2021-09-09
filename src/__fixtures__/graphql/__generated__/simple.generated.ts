@@ -2,15 +2,24 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
-export type UserHeaderFragment = { __typename?: "User"; username: string; avatarUrl?: Types.Maybe<string> };
+export type UserHeaderFragment = {
+  readonly __typename?: "User";
+  readonly username: string;
+  readonly avatarUrl?: Types.Maybe<string>;
+};
 
 export type GetUserHeaderQueryVariables = Types.Exact<{
   userId: Types.Scalars["String"];
 }>;
 
 export type GetUserHeaderQuery = {
-  __typename?: "Query";
-  userById: { __typename?: "User"; id: string; username: string; avatarUrl?: Types.Maybe<string> };
+  readonly __typename?: "Query";
+  readonly userById: {
+    readonly __typename?: "User";
+    readonly id: string;
+    readonly username: string;
+    readonly avatarUrl?: Types.Maybe<string>;
+  };
 };
 
 export const UserHeaderFragmentDoc = {

@@ -2,6 +2,7 @@ import { maskWithFragment } from "./maskWithFragment";
 import * as simpleFixtures from "./__fixtures__/graphql/__generated__/simple.generated";
 import * as nestedFixtures from "./__fixtures__/graphql/__generated__/nested.generated";
 import * as nestedListFixtures from "./__fixtures__/graphql/__generated__/nestedList.generated";
+import * as inlineFragmentFixtures from "./__fixtures__/graphql/__generated__/inlineFragment.generated";
 
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
@@ -68,6 +69,28 @@ Object {
       "body": "Hi",
     },
   ],
+  "title": "Hi",
+}
+`);
+});
+
+it("masks query results with inline fragment", () => {
+  const input: inlineFragmentFixtures.GetPostWithAuthorQuery = {
+    __typename: "Query",
+    postById: {
+      __typename: "Post",
+      id: "1",
+      title: "Hi",
+      author: { __typename: "User", username: "testuser" },
+    },
+  };
+  const output = maskWithFragment(inlineFragmentFixtures.PostWithAuthorFragmentDoc, input.postById);
+
+  expect(output).toMatchInlineSnapshot(`
+Object {
+  "author": Object {
+    "username": "testuser",
+  },
   "title": "Hi",
 }
 `);

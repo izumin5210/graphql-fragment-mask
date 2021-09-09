@@ -1,0 +1,15 @@
+fragment PostWithAuthor on Post {
+  title
+  author {
+    ... on User {
+      username
+    }
+  }
+}
+
+query GetPostWithAuthor($postId: String!) {
+  postById(postId: $postId) {
+    id
+    ...PostWithAuthor
+  }
+}

@@ -3,10 +3,10 @@ import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type PostWithCommentsFragment = {
-  __typename?: "Post";
-  title: string;
-  body: string;
-  comments: Array<{ __typename?: "Comment"; body: string }>;
+  readonly __typename?: "Post";
+  readonly title: string;
+  readonly body: string;
+  readonly comments: ReadonlyArray<{ readonly __typename?: "Comment"; readonly body: string }>;
 };
 
 export type GetPostWithCommentsQueryVariables = Types.Exact<{
@@ -14,13 +14,13 @@ export type GetPostWithCommentsQueryVariables = Types.Exact<{
 }>;
 
 export type GetPostWithCommentsQuery = {
-  __typename?: "Query";
-  postById: {
-    __typename?: "Post";
-    id: string;
-    title: string;
-    body: string;
-    comments: Array<{ __typename?: "Comment"; id: string; body: string }>;
+  readonly __typename?: "Query";
+  readonly postById: {
+    readonly __typename?: "Post";
+    readonly id: string;
+    readonly title: string;
+    readonly body: string;
+    readonly comments: ReadonlyArray<{ readonly __typename?: "Comment"; readonly id: string; readonly body: string }>;
   };
 };
 
