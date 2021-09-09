@@ -23,6 +23,16 @@ jobs:
         flag-name: node${{ matrix.node }}
         parallel: true
 
+  test-finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
+
   build:
     runs-on: ubuntu-latest
     name: Build
