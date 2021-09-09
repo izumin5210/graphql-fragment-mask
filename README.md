@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/v/graphql-fragment-mask)](https://www.npmjs.com/package/graphql-fragment-mask)
 [![LICENSE](https://img.shields.io/github/license/izumin5210/graphql-fragment-mask)](./LICENSE)
 
-Mask GraphQL query result with Fragment with [https://the-guild.dev/blog/typed-document-node](https://the-guild.dev/blog/typed-document-node) ([graphql-anywhere](https://www.npmjs.com/package/graphql-anywhere) alternative)
+Mask GraphQL query result with Fragment with [TypedDocumentNode](https://the-guild.dev/blog/typed-document-node) ([graphql-anywhere](https://www.npmjs.com/package/graphql-anywhere) alternative)
 
 ## Usage
 
