@@ -2,21 +2,18 @@ import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { FragmentDefinitionNode, InlineFragmentNode } from "graphql";
 import deepMerge from "deepmerge";
 
-type AnyObject = Record<string, unknown>;
-type Superset<T extends AnyObject> = T & AnyObject;
-
-export function maskWithFragment<TData extends AnyObject>(
-  doc: TypedDocumentNode<TData, any>,
-  input: Superset<TData>
-): TData;
-export function maskWithFragment<TData extends AnyObject>(
-  doc: TypedDocumentNode<TData, any>,
-  input: ReadonlyArray<Superset<TData>>
-): ReadonlyArray<TData>;
-export function maskWithFragment<TData extends AnyObject>(
-  doc: TypedDocumentNode<TData, any>,
-  input: Superset<TData> | ReadonlyArray<Superset<TData>>
-): TData | ReadonlyArray<TData> {
+export function maskWithFragment<TFilteredData extends Record<string, unknown>, TData extends TFilteredData>(
+  doc: TypedDocumentNode<TFilteredData, any>,
+  input: TData
+): TFilteredData;
+export function maskWithFragment<TFilteredData extends Record<string, unknown>, TData extends TFilteredData>(
+  doc: TypedDocumentNode<TFilteredData, any>,
+  input: ReadonlyArray<TData>
+): ReadonlyArray<TFilteredData>;
+export function maskWithFragment<TFilteredData extends Record<string, unknown>, TData extends TFilteredData>(
+  doc: TypedDocumentNode<TFilteredData, any>,
+  input: TData | ReadonlyArray<TData>
+): TFilteredData | ReadonlyArray<TFilteredData> {
   if (doc.definitions[0]?.kind !== "FragmentDefinition") {
     throw new Error("input document should be fragment definition");
   }
@@ -32,7 +29,7 @@ export function maskWithFragment<TData extends AnyObject>(
   if (Array.isArray(input)) {
     return input.map((v) => extractFields(entryFragmentDef, v, fragmentDefMap) as TData);
   }
-  return extractFields(entryFragmentDef, input as Superset<TData>, fragmentDefMap) as TData;
+  return extractFields(entryFragmentDef, input as TData, fragmentDefMap) as TFilteredData;
 }
 
 function extractFields(

@@ -8,6 +8,10 @@ import * as multipleFragmentsFixtures from "./__fixtures__/graphql/__generated__
 import * as rootListFixtures from "./__fixtures__/graphql/__generated__/rootList.generated";
 import * as unionFixtures from "./__fixtures__/graphql/__generated__/union.generated";
 
+const expectType = <T>(_value: T) => {
+  /* no-op */
+};
+
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
     __typename: "Query",
@@ -22,6 +26,7 @@ Object {
   "username": "testuser",
 }
 `);
+  expectType<simpleFixtures.UserHeaderFragment>(output);
 });
 
 it("masks query results with nested fragment", () => {
@@ -47,6 +52,7 @@ Object {
   "title": "Hi",
 }
 `);
+  expectType<nestedFixtures.PostHeaderFragment>(output);
 });
 
 it("masks query results with nested fragment with list fields", () => {
@@ -82,6 +88,7 @@ Object {
   "title": "Hi",
 }
 `);
+  expectType<nestedListFixtures.PostWithCommentsFragment>(output);
 });
 
 it("masks query results with inline fragment", () => {
@@ -106,6 +113,7 @@ Object {
   "title": "Hi",
 }
 `);
+  expectType<inlineFragmentFixtures.PostWithAuthorFragment>(output);
 });
 
 it("masks query results with fragment with alias", () => {
@@ -133,6 +141,7 @@ Object {
   },
 }
 `);
+  expectType<aliasFixtures.PostSummaryFragment>(output);
 });
 
 it("masks query results with multiple fragments", () => {
@@ -160,6 +169,7 @@ Object {
   "title": "Hi",
 }
 `);
+  expectType<multipleFragmentsFixtures.PostDetailFragment>(detail);
 
   const detailHeader = maskWithFragment(multipleFragmentsFixtures.PostDetailHeaderFragmentDoc, input.postById);
   expect(detailHeader).toMatchInlineSnapshot(`
@@ -172,6 +182,7 @@ Object {
   "title": "Hi",
 }
 `);
+  expectType<multipleFragmentsFixtures.PostDetailHeaderFragment>(detailHeader);
 });
 
 it("masks list query results with fragment", () => {
@@ -218,6 +229,7 @@ Array [
   },
 ]
 `);
+  expectType<ReadonlyArray<rootListFixtures.PostListItemFragment>>(output);
 });
 
 it("masks list query results with fragment", () => {
@@ -255,4 +267,5 @@ Object {
   "title": "Hi",
 }
 `);
+  expectType<unionFixtures.PostWithAttachmentsFragment>(output);
 });
