@@ -46,10 +46,10 @@
   },
   "scripts": {
     "build": "yarn clean && yarn build:commonjs && yarn build:esmodule",
-    "build:commonjs": "tsc -p .",
-    "build:esmodule": "tsc -p tsconfig.module.json",
-    "clean": "rimraf lib module src/**/__generated__",
-    "generate": "graphql-codegen --config ./src/__fixtures__/codegen.yml",
+    "build:commonjs": "tsc -p tsconfig.build.json",
+    "build:esmodule": "tsc -p tsconfig.build.module.json",
+    "clean": "rimraf lib module",
+    "generate": "rimraf src/**/__generated__ && graphql-codegen --config ./src/__fixtures__/codegen.yml",
     "pretest": "yarn clean && yarn generate",
     "test": "jest"
   },
