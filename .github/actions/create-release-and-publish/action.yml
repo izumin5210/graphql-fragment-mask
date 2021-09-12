@@ -1,0 +1,80 @@
+name: create-release-and-publish
+description: Create GitHub Release and publish somewhere
+inputs:
+  github-token:
+    description: 'GitHub Access Token for generating changelog'
+    default: ${{ github.token }}
+    required: true
+  run-publish:
+    description: 'Script for publishing'
+    required: true
+  get-version:
+    description: 'Script for extracting current version'
+    default: |
+      node --print 'require("./package.json").version'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: ./.github/actions/release-meta
+      id: release-meta
+      with:
+        get-version: ${{ inputs.get-version }}
+
+    - name: Setup git
+      shell: bash
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Update CHANGELOG.md
+      shell: bash
+      run: |
+        mkdir -p tmp
+        echo "${RELEASE_NOTE}" > tmp/CHANGELOG.head.md
+        git show ${{ github.base_ref }}:./CHANGELOG.md > tmp/CHANGELOG.base.md
+        cat -s tmp/CHANGELOG.head.md tmp/CHANGELOG.base.md > CHANGELOG.md
+        git add CHANGELOG.md
+        git commit -m "Update CHANGELOG for ${RELEASE_TAG}"
+        git push
+      env:
+        RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
+        RELEASE_NOTE: ${{ steps.release-meta.outputs.note }}
+
+    - name: Create GitHub Release
+      uses: actions/github-script@v4
+      with:
+        script: |
+          github.repos.createRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            name: process.env.RELEASE_TAG,
+            tag_name: process.env.RELEASE_TAG,
+            body: process.env.RELEASE_NOTE,
+            prerelease: !/v\d+\.\d+\.\d+$/.test(process.env.RELEASE_TAG),
+            target_commitish: context.sha,
+          })
+      env:
+        RELEASE_NOTE: ${{ steps.release-meta.outputs.note }}
+        RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
+
+    - name: Publish to npm
+      shell: bash
+      run: ${{ inputs.run-publish }}
+
+    - name: Comment to PR
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${process.env.RELEASE_TAG}`
+          github.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.issue.number,
+            body: `[${process.env.RELEASE_TAG}](${url}) is released 🚀`,
+          })
+      env:
+        RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}

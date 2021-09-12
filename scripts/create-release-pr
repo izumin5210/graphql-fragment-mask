@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -eu
+set -o pipefail
+
+ROOT_DIR=$(dirname $0)/..
+
+yarn lerna version --no-git-tag-version
+
+version=$(node --print 'require("./package.json").version')
+branch="releases/${version}"
+
+git switch -c ${branch}
+git commit --all -m "Release ${version}"
+git push origin ${branch}
+
+gh pr create \
+  --base="main" \
+  --head="${branch}" \
+  --title="Release v${version}" \
+  --body="Release note will be generated automatically... ✍" \
+  --asignee="@me" \
+  --draft

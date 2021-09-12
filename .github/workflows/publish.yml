@@ -1,0 +1,38 @@
+name: Publish
+
+on:
+  pull_request:
+    branches:
+    - main
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+jobs:
+  publish:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'releases/')
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14.x
+        registry-url: 'https://npm.pkg.github.com'
+
+    - run: yarn --frozen-lockfile
+
+    - uses: ./.github/actions/create-release-and-publish
+      with:
+        run-publish: |
+          yarn lerna publish from-package --yes
+        get-version: |
+          node --print 'require("./lerna.json").version'
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
