@@ -1,0 +1,40 @@
+name: release-meta
+description: Output release metadata
+inputs:
+  github-token:
+    description: 'GitHub Access Token for generating changelog'
+    default: ${{ github.token }}
+    required: true
+  get-version:
+    description: 'Script for extracting current version'
+    default: |
+      node --print 'require("./package.json").version'
+    required: true
+outputs:
+  version:
+    description: 'Release version'
+    value: ${{ steps.meta.outputs.version }}
+  tag:
+    description: 'Release git tag'
+    value: ${{ steps.meta.outputs.tag }}
+  note:
+    description: 'Release note'
+    value: ${{ steps.meta.outputs.note }}
+runs:
+  using: "composite"
+  steps:
+    - id: meta
+      shell: bash
+      run: |
+        version=$(${{ inputs.get-version }})
+        note=$(npx --quiet lerna-changelog --next-version ${version})
+
+        echo "::set-output name=version::${version}"
+        echo "::set-output name=tag::v${version}"
+
+        note="${note//'%'/'%25'}"
+        note="${note//$'\n'/'%0A'}"
+        note="${note//$'\r'/'%0D'}"
+        echo "::set-output name=note::${note}"
+      env:
+        GITHUB_AUTH: ${{ inputs.github-token }}

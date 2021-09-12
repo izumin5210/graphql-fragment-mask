@@ -1,0 +1,30 @@
+name: generate-changelog
+description: Generate and commit the CHANGELOG, and update the body of the Pull Request.
+inputs:
+  get-version:
+    description: 'Script for extracting current version'
+    default: |
+      node --print 'require("./package.json").version'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: ./.github/actions/release-meta
+      id: release-meta
+      with:
+        get-version: ${{ inputs.get-version }}
+
+    - name: Update PR body
+      uses: actions/github-script@v4
+      with:
+        script: |
+          github.pulls.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number,
+            title: `Release ${process.env.RELEASE_TAG}`,
+            body: process.env.RELEASE_NOTE,
+          })
+      env:
+        RELEASE_NOTE: ${{ steps.release-meta.outputs.note }}
+        RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
