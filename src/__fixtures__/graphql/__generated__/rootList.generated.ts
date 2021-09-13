@@ -2,6 +2,7 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import gql from "graphql-tag";
 export type PostListItemFragment = {
   readonly __typename?: "Post";
   readonly title: string;
@@ -101,3 +102,22 @@ export const ListPostsDocument = {
     ...PostListItemFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<ListPostsQuery, ListPostsQueryVariables>;
+export const PostListItem = gql`
+  fragment PostListItem on Post {
+    title
+    author {
+      id
+      avatarUrl
+      username
+    }
+  }
+`;
+export const ListPosts = gql`
+  query ListPosts($userId: String!) {
+    postsByUserId(userId: $userId) {
+      id
+      ...PostListItem
+    }
+  }
+  ${PostListItem}
+`;

@@ -2,6 +2,7 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import gql from "graphql-tag";
 export type PostSummaryFragment = {
   readonly __typename?: "Post";
   readonly title: string;
@@ -106,3 +107,22 @@ export const GetPostSummaryDocument = {
     ...PostSummaryFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<GetPostSummaryQuery, GetPostSummaryQueryVariables>;
+export const PostSummary = gql`
+  fragment PostSummary on Post {
+    title
+    body
+    user: author {
+      username
+      thumbnailUrl: avatarUrl
+    }
+  }
+`;
+export const GetPostSummary = gql`
+  query GetPostSummary($postId: String!) {
+    postById(postId: $postId) {
+      id
+      ...PostSummary
+    }
+  }
+  ${PostSummary}
+`;

@@ -2,6 +2,7 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import gql from "graphql-tag";
 export type PostHeaderUserFragment = {
   readonly __typename?: "User";
   readonly username: string;
@@ -128,3 +129,30 @@ export const GetPostHeaderDocument = {
     ...PostHeaderFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<GetPostHeaderQuery, GetPostHeaderQueryVariables>;
+export const PostHeaderUser = gql`
+  fragment PostHeaderUser on User {
+    username
+    avatarUrl
+  }
+`;
+export const PostHeader = gql`
+  fragment PostHeader on Post {
+    title
+    author {
+      ...PostHeaderUser
+    }
+  }
+  ${PostHeaderUser}
+`;
+export const GetPostHeader = gql`
+  query GetPostHeader($postId: String!) {
+    postById(postId: $postId) {
+      id
+      author {
+        id
+      }
+      ...PostHeader
+    }
+  }
+  ${PostHeader}
+`;
