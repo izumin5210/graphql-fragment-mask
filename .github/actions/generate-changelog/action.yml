@@ -46,9 +46,11 @@ runs:
         git show ${{ github.event.pull_request.base.sha }}:./CHANGELOG.md > tmp/CHANGELOG.base.md
         cat -s tmp/CHANGELOG.head.md tmp/CHANGELOG.base.md > CHANGELOG.md
         git checkout ${{ github.event.pull_request.head.ref }}
-        git add CHANGELOG.md
-        git commit -m "Update CHANGELOG for ${RELEASE_TAG}"
-        git push origin HEAD:${{ github.event.pull_request.head.ref }}
+        if git diff --name-only CHANGELOG.md | grep -q -e '^CHANGELOG.md$'; then
+          git add CHANGELOG.md
+          git commit -m "Update CHANGELOG for ${RELEASE_TAG}"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+        fi
       env:
         RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
         RELEASE_NOTE: ${{ steps.release-meta.outputs.note }}
