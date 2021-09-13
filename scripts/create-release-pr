@@ -19,5 +19,5 @@ gh pr create \
   --head="${branch}" \
   --title="Release v${version}" \
   --body="Release note will be generated automatically... ✍" \
-  --asignee="@me" \
+  --assignee="@me" \
   --draft
