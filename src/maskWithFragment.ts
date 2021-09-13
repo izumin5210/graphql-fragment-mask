@@ -2,10 +2,82 @@ import { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { FragmentDefinitionNode, DocumentNode, InlineFragmentNode } from "graphql";
 import deepMerge from "deepmerge";
 
+/**
+ * Masks the input object to the shape of the fragment.
+ *
+ * @returns A copy of the input object masked by the fragment.
+ *
+ * @example
+ * ```ts
+ * import gql from "graphql-tag";
+ * import { PostHeaderFragment } from "./__generated__/Post.generated";
+ *
+ * const POST_HEADER = gql`
+ *   fragment PostHeader on Post {
+ *     title
+ *     author { fullName, avatarUrl }
+ *   }
+ * `;
+ *
+ * // The type of `header` is `PostHeaderFragment` if you specify a type parameter.
+ * const header = maskWithFragment<PostHeaderFragment>(POST_HEADER, data);
+ * ```
+ *
+ * @example
+ * ```ts
+ * import { PostHeaderFragmentDoc } from "./__generated__/Post.generated";
+ *
+ * const _POST_HEADER = gql`
+ *   fragment PostHeader on Post {
+ *     title
+ *     author { fullName, avatarUrl }
+ *   }
+ * `;
+ *
+ * // The type of `header` is inferred to `PostHeaderFragment`.
+ * const header = maskWithFragment(PostHeaderFragmentDoc, data);
+ * ```
+ */
 export function maskWithFragment<
   TFilteredData extends Record<string, unknown>,
   TData extends TFilteredData = TFilteredData
 >(doc: DocumentNode | TypedDocumentNode<TFilteredData, any>, input: TData): TFilteredData;
+/**
+ * Masks objects contained in the input array to the shape of the fragment.
+ *
+ * @returns the array contains copies of objects masked by the fragment.
+ *
+ * @example
+ * ```ts
+ * import gql from "graphql-tag";
+ * import { PostHeaderFragment } from "./__generated__/Post.generated";
+ *
+ * const POST_HEADER = gql`
+ *   fragment PostHeader on Post {
+ *     title
+ *     author { fullName, avatarUrl }
+ *   }
+ * `;
+ *
+ * // The type of `header` is `ReadonlyArray<PostHeaderFragment>` if you specify a type parameter.
+ * const header = maskWithFragment<PostHeaderFragment>(POST_HEADER, data);
+ * ```
+ *
+ * @example
+ * ```ts
+ * import { PostHeaderFragmentDoc } from "./__generated__/Post.generated";
+ *
+ * const _POST_HEADER = gql`
+ *   fragment PostHeader on Post {
+ *     title
+ *     author { fullName, avatarUrl }
+ *   }
+ * `;
+ *
+ * // The type of `header` is inferred to `ReadonlyArray<PostHeaderFragment>`.
+ * const header = maskWithFragment(PostHeaderFragmentDoc, data);
+ * ```
+ */
 export function maskWithFragment<
   TFilteredData extends Record<string, unknown>,
   TData extends TFilteredData = TFilteredData
