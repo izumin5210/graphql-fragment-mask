@@ -2,6 +2,7 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import gql from "graphql-tag";
 export type PostImageFragment = { readonly __typename?: "Image"; readonly imageUrl: string };
 
 export type PostVideoFragment = { readonly __typename?: "Video"; readonly videoUrl: string };
@@ -126,3 +127,32 @@ export const GetPostWithAttachmentsDocument = {
     ...PostWithAttachmentsFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<GetPostWithAttachmentsQuery, GetPostWithAttachmentsQueryVariables>;
+export const PostImage = gql`
+  fragment PostImage on Image {
+    imageUrl
+  }
+`;
+export const PostVideo = gql`
+  fragment PostVideo on Video {
+    videoUrl
+  }
+`;
+export const PostWithAttachments = gql`
+  fragment PostWithAttachments on Post {
+    title
+    attachmentFiles {
+      ...PostImage
+      ...PostVideo
+    }
+  }
+  ${PostImage}
+  ${PostVideo}
+`;
+export const GetPostWithAttachments = gql`
+  query GetPostWithAttachments($postId: String!) {
+    postById(postId: $postId) {
+      ...PostWithAttachments
+    }
+  }
+  ${PostWithAttachments}
+`;

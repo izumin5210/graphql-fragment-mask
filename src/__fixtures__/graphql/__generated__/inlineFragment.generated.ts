@@ -2,6 +2,7 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import gql from "graphql-tag";
 export type PostWithAuthorFragment = {
   readonly __typename?: "Post";
   readonly title: string;
@@ -96,3 +97,22 @@ export const GetPostWithAuthorDocument = {
     ...PostWithAuthorFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<GetPostWithAuthorQuery, GetPostWithAuthorQueryVariables>;
+export const PostWithAuthor = gql`
+  fragment PostWithAuthor on Post {
+    title
+    author {
+      ... on User {
+        username
+      }
+    }
+  }
+`;
+export const GetPostWithAuthor = gql`
+  query GetPostWithAuthor($postId: String!) {
+    postById(postId: $postId) {
+      id
+      ...PostWithAuthor
+    }
+  }
+  ${PostWithAuthor}
+`;

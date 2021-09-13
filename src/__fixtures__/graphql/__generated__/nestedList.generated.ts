@@ -2,6 +2,7 @@
 import * as Types from "../../__generated__/graphqlTypes";
 
 import { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
+import gql from "graphql-tag";
 export type PostWithCommentsFragment = {
   readonly __typename?: "Post";
   readonly title: string;
@@ -98,3 +99,24 @@ export const GetPostWithCommentsDocument = {
     ...PostWithCommentsFragmentDoc.definitions,
   ],
 } as unknown as DocumentNode<GetPostWithCommentsQuery, GetPostWithCommentsQueryVariables>;
+export const PostWithComments = gql`
+  fragment PostWithComments on Post {
+    title
+    body
+    comments {
+      body
+    }
+  }
+`;
+export const GetPostWithComments = gql`
+  query GetPostWithComments($postId: String!) {
+    postById(postId: $postId) {
+      id
+      comments {
+        id
+      }
+      ...PostWithComments
+    }
+  }
+  ${PostWithComments}
+`;

@@ -8,10 +8,6 @@ import * as multipleFragmentsFixtures from "./__fixtures__/graphql/__generated__
 import * as rootListFixtures from "./__fixtures__/graphql/__generated__/rootList.generated";
 import * as unionFixtures from "./__fixtures__/graphql/__generated__/union.generated";
 
-const expectType = <T>(_value: T) => {
-  /* no-op */
-};
-
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
     __typename: "Query",
@@ -26,7 +22,6 @@ Object {
   "username": "testuser",
 }
 `);
-  expectType<simpleFixtures.UserHeaderFragment>(output);
 });
 
 it("masks query results with nested fragment", () => {
@@ -52,7 +47,6 @@ Object {
   "title": "Hi",
 }
 `);
-  expectType<nestedFixtures.PostHeaderFragment>(output);
 });
 
 it("masks query results with nested fragment with list fields", () => {
@@ -88,7 +82,6 @@ Object {
   "title": "Hi",
 }
 `);
-  expectType<nestedListFixtures.PostWithCommentsFragment>(output);
 });
 
 it("masks query results with inline fragment", () => {
@@ -113,7 +106,6 @@ Object {
   "title": "Hi",
 }
 `);
-  expectType<inlineFragmentFixtures.PostWithAuthorFragment>(output);
 });
 
 it("masks query results with fragment with alias", () => {
@@ -141,7 +133,6 @@ Object {
   },
 }
 `);
-  expectType<aliasFixtures.PostSummaryFragment>(output);
 });
 
 it("masks query results with multiple fragments", () => {
@@ -169,7 +160,6 @@ Object {
   "title": "Hi",
 }
 `);
-  expectType<multipleFragmentsFixtures.PostDetailFragment>(detail);
 
   const detailHeader = maskWithFragment(multipleFragmentsFixtures.PostDetailHeaderFragmentDoc, input.postById);
   expect(detailHeader).toMatchInlineSnapshot(`
@@ -182,7 +172,6 @@ Object {
   "title": "Hi",
 }
 `);
-  expectType<multipleFragmentsFixtures.PostDetailHeaderFragment>(detailHeader);
 });
 
 it("masks list query results with fragment", () => {
@@ -229,7 +218,6 @@ Array [
   },
 ]
 `);
-  expectType<ReadonlyArray<rootListFixtures.PostListItemFragment>>(output);
 });
 
 it("masks list query results with fragment", () => {
@@ -267,5 +255,48 @@ Object {
   "title": "Hi",
 }
 `);
-  expectType<unionFixtures.PostWithAttachmentsFragment>(output);
+});
+
+const expectType = <T>(_value: T) => {
+  /* no-op */
+};
+
+describe("types", () => {
+  const input: simpleFixtures.GetUserHeaderQuery = {
+    __typename: "Query",
+    userById: { __typename: "User", id: "123", username: "testuser", avatarUrl: null },
+  };
+
+  describe("with typed document node", () => {
+    it("returns a masked result with a valid type", () => {
+      const output = maskWithFragment(simpleFixtures.UserHeaderFragmentDoc, input.userById);
+      expectType<simpleFixtures.UserHeaderFragment>(output);
+    });
+
+    it("has type error when 2nd argument is not a subset type of the return value", () => {
+      expect(() => {
+        // @ts-expect-error: 2nd argument has invalid type
+        maskWithFragment(simpleFixtures.UserHeaderFragmentDoc, {});
+      }).toThrowError();
+    });
+  });
+
+  describe("with document node", () => {
+    it("returns a masked result with a record when type parameter is not specified", () => {
+      const output = maskWithFragment(simpleFixtures.UserHeader, input.userById);
+      expectType<Record<string, unknown>>(output);
+    });
+
+    it("returns a masked result with a valid type when type parameter is specified", () => {
+      const output = maskWithFragment<simpleFixtures.UserHeaderFragment>(simpleFixtures.UserHeader, input.userById);
+      expectType<simpleFixtures.UserHeaderFragment>(output);
+    });
+
+    it("has type error when 2nd argument is not a subset type of the return value", () => {
+      expect(() => {
+        // @ts-expect-error: 2nd argument has invalid type
+        maskWithFragment<simpleFixtures.UserHeaderFragment>(simpleFixtures.UserHeader, {});
+      }).toThrowError();
+    });
+  });
 });
