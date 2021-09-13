@@ -25,6 +25,3 @@ jobs:
     - run: yarn --frozen-lockfile
 
     - uses: ./.github/actions/generate-changelog
-      with:
-        get-version: |
-          node --print 'require("./lerna.json").version'

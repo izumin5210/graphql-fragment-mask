@@ -31,8 +31,6 @@ jobs:
     - uses: ./.github/actions/create-release-and-publish
       with:
         run-publish: |
-          yarn lerna publish from-package --yes
-        get-version: |
-          node --print 'require("./lerna.json").version'
+          yarn publish
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
