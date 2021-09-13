@@ -1,6 +1,6 @@
 {
   "name": "graphql-fragment-mask",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Mask GraphQL query result with Fragment",
   "repository": "https://github.com/izumin5210/graphql-fragment-mask.git",
   "homepage": "https://github.com/izumin5210/graphql-fragment-mask",
