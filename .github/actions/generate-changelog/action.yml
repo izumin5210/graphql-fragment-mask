@@ -47,7 +47,7 @@ runs:
         cat -s tmp/CHANGELOG.head.md tmp/CHANGELOG.base.md > CHANGELOG.md
         git add CHANGELOG.md
         git commit -m "Update CHANGELOG for ${RELEASE_TAG}"
-        git push
+        git push origin HEAD:${GITHUB_REF}
       env:
         RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
         RELEASE_NOTE: ${{ steps.release-meta.outputs.note }}
