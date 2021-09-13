@@ -45,9 +45,9 @@ runs:
         echo "${RELEASE_NOTE}" > tmp/CHANGELOG.head.md
         git show ${{ github.event.pull_request.base.sha }}:./CHANGELOG.md > tmp/CHANGELOG.base.md
         cat -s tmp/CHANGELOG.head.md tmp/CHANGELOG.base.md > CHANGELOG.md
+        git checkout ${{ github.event.pull_request.head.ref }}
         git add CHANGELOG.md
         git commit -m "Update CHANGELOG for ${RELEASE_TAG}"
-        git checkout ${{ github.event.pull_request.head.ref }}
         git push origin HEAD:${{ github.event.pull_request.head.ref }}
       env:
         RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
