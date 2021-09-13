@@ -82,13 +82,17 @@ export function maskWithFragment<
   TFilteredData extends Record<string, unknown>,
   TData extends TFilteredData = TFilteredData
 >(doc: DocumentNode | TypedDocumentNode<TFilteredData, any>, input: ReadonlyArray<TData>): ReadonlyArray<TFilteredData>;
+export function maskWithFragment(doc: DocumentNode | TypedDocumentNode<any, any>, input: null): null;
+export function maskWithFragment(doc: DocumentNode | TypedDocumentNode<any, any>, input: undefined): undefined;
 export function maskWithFragment<
   TFilteredData extends Record<string, unknown>,
   TData extends TFilteredData = TFilteredData
 >(
   doc: DocumentNode | TypedDocumentNode<TFilteredData, any>,
-  input: TData | ReadonlyArray<TData>
-): TFilteredData | ReadonlyArray<TFilteredData> {
+  input: TData | ReadonlyArray<TData> | null | undefined
+): TFilteredData | ReadonlyArray<TFilteredData> | null | undefined {
+  if (input == null) return input;
+
   if (doc.definitions[0]?.kind !== "FragmentDefinition") {
     throw new Error("input document should be fragment definition");
   }

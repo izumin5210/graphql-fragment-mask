@@ -8,6 +8,12 @@ import * as multipleFragmentsFixtures from "./__fixtures__/graphql/__generated__
 import * as rootListFixtures from "./__fixtures__/graphql/__generated__/rootList.generated";
 import * as unionFixtures from "./__fixtures__/graphql/__generated__/union.generated";
 
+it("returns null when 2nd arg is null", () => {
+  const output = maskWithFragment(simpleFixtures.UserHeaderFragmentDoc, null);
+  expectType<null>(output);
+  expect(output).toBeNull();
+});
+
 it("masks query results with simple fragment", () => {
   const input: simpleFixtures.GetUserHeaderQuery = {
     __typename: "Query",
