@@ -1,17 +1,20 @@
 import { TypedDocumentNode } from "@graphql-typed-document-node/core";
-import { FragmentDefinitionNode, InlineFragmentNode } from "graphql";
+import { FragmentDefinitionNode, DocumentNode, InlineFragmentNode } from "graphql";
 import deepMerge from "deepmerge";
 
-export function maskWithFragment<TFilteredData extends Record<string, unknown>, TData extends TFilteredData>(
-  doc: TypedDocumentNode<TFilteredData, any>,
-  input: TData
-): TFilteredData;
-export function maskWithFragment<TFilteredData extends Record<string, unknown>, TData extends TFilteredData>(
-  doc: TypedDocumentNode<TFilteredData, any>,
-  input: ReadonlyArray<TData>
-): ReadonlyArray<TFilteredData>;
-export function maskWithFragment<TFilteredData extends Record<string, unknown>, TData extends TFilteredData>(
-  doc: TypedDocumentNode<TFilteredData, any>,
+export function maskWithFragment<
+  TFilteredData extends Record<string, unknown>,
+  TData extends TFilteredData = TFilteredData
+>(doc: DocumentNode | TypedDocumentNode<TFilteredData, any>, input: TData): TFilteredData;
+export function maskWithFragment<
+  TFilteredData extends Record<string, unknown>,
+  TData extends TFilteredData = TFilteredData
+>(doc: DocumentNode | TypedDocumentNode<TFilteredData, any>, input: ReadonlyArray<TData>): ReadonlyArray<TFilteredData>;
+export function maskWithFragment<
+  TFilteredData extends Record<string, unknown>,
+  TData extends TFilteredData = TFilteredData
+>(
+  doc: DocumentNode | TypedDocumentNode<TFilteredData, any>,
   input: TData | ReadonlyArray<TData>
 ): TFilteredData | ReadonlyArray<TFilteredData> {
   if (doc.definitions[0]?.kind !== "FragmentDefinition") {
