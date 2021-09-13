@@ -28,3 +28,26 @@ runs:
       env:
         RELEASE_NOTE: ${{ steps.release-meta.outputs.note }}
         RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
+
+    - name: Setup git
+      shell: bash
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Update CHANGELOG.md
+      shell: bash
+      run: |
+        mkdir -p tmp
+        echo "${RELEASE_NOTE}" > tmp/CHANGELOG.head.md
+        git show ${{ github.event.pull_request.base.sha }}:./CHANGELOG.md > tmp/CHANGELOG.base.md
+        cat -s tmp/CHANGELOG.head.md tmp/CHANGELOG.base.md > CHANGELOG.md
+        git add CHANGELOG.md
+        git commit -m "Update CHANGELOG for ${RELEASE_TAG}"
+        git push
+      env:
+        RELEASE_TAG: ${{ steps.release-meta.outputs.tag }}
+        RELEASE_NOTE: ${{ steps.release-meta.outputs.note }}
