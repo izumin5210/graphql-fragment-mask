@@ -61,5 +61,13 @@
   },
   "dependencies": {
     "deepmerge": "^4.2.2"
+  },
+  "frolint": {
+    "eslint": {
+      "ignorePath": "./.eslintignore"
+    },
+    "prettier": {
+      "ignorePath": "./.prettierignore"
+    }
   }
 }
